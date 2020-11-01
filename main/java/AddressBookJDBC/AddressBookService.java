@@ -44,15 +44,22 @@ public class AddressBookService {
 		List<Contact> contactList = addressBookDBService.getContactDataByName(name);
 		return contactList.get(0).equals(getContactData(name));
 	}
-	
+
 	public List<Contact> readContactDataForGivenDateRange(LocalDate startDate, LocalDate endDate) {
 		this.contactList = addressBookDBService.getContactForGivenDateRange(startDate, endDate);
 		return contactList;
 	}
-	
+
 	public Map<String, Integer> readContactByCityOrState() {
-		this.contactByCityOrState=addressBookDBService.getContactsByCityOrState();
+		this.contactByCityOrState = addressBookDBService.getContactsByCityOrState();
 		return contactByCityOrState;
+	}
+
+	public void addContactToDatabase(String firstName, String lastName, String address, String city, String state,
+			int zip, int phone, String email, String addressBookName, String addressBookType, LocalDate startDate) {
+		contactList.add(addressBookDBService.addContact(firstName, lastName, address, city, state, zip, phone, email,
+				addressBookName, startDate));
+
 	}
 
 }

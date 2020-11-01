@@ -13,7 +13,7 @@ public class AddressBookTest {
 	public void contactsWhenRetrievedFromDB_ShouldMatchCount() {
 		AddressBookService addressBookService = new AddressBookService();
 		List<Contact> contactList = addressBookService.readContactData();
-		Assert.assertEquals(3, contactList.size());
+		Assert.assertEquals(4, contactList.size());
 	}
 
 	@Test
@@ -32,7 +32,7 @@ public class AddressBookTest {
 		LocalDate startDate = LocalDate.of(2018, 01, 01);
 		LocalDate endDate = LocalDate.now();
 		List<Contact> contactList = addressBookService.readContactDataForGivenDateRange(startDate, endDate);
-		Assert.assertEquals(2, contactList.size());
+		Assert.assertEquals(3, contactList.size());
 	}
 
 	@Test
@@ -42,5 +42,16 @@ public class AddressBookTest {
 		Map<String, Integer> contactByCityOrStateMap = addressBookService.readContactByCityOrState();
 		Assert.assertEquals(true, contactByCityOrStateMap.get("Hyderabad").equals(2));
 		Assert.assertEquals(true, contactByCityOrStateMap.get("TamilNadu").equals(1));
+	}
+
+	@Test
+	public void givenNewContact_WhenAdded_ShouldSyncWithDB() {
+		AddressBookService addressBookService = new AddressBookService();
+		addressBookService.readContactData();
+		LocalDate date = LocalDate.of(2020, 02, 20);
+		addressBookService.addContactToDatabase("Uma", "Rani", "Whitefield", "Bangalore", "Karnataka", 700012, 99084874,
+				"umarani@gmail.com", "Personal", "Family", date);
+		boolean result = addressBookService.checkContactInSyncWithDB("Uma");
+		Assert.assertTrue(result);
 	}
 }

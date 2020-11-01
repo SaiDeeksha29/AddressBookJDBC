@@ -1,5 +1,7 @@
 package AddressBookJDBC;
 
+import java.time.LocalDate;
+
 public class Contact {
 	public String firstName;
 	public String lastName;
@@ -11,6 +13,7 @@ public class Contact {
 	public String email;
 	public String addressBookName;
 	public String addressBookType;
+	public LocalDate startDate;
 
 	public Contact(String firstName, String lastName, String address, String city, String state, int zip,
 			int phoneNumber, String email, String addressBookName, String addressBookType) {
@@ -24,6 +27,20 @@ public class Contact {
 		this.email = email;
 		this.addressBookName = addressBookName;
 		this.addressBookType = addressBookType;
+	}
+
+	public Contact(String firstName, String lastName, String address, String city, String state, int zip,
+			int phoneNumber, String email, String addressBookName, LocalDate startDate) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.addressBookName = addressBookName;
+		this.startDate = startDate;
 	}
 
 	@Override
