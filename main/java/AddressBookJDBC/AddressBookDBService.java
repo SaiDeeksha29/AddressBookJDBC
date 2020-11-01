@@ -8,6 +8,7 @@ public class AddressBookDBService {
 
 	private static AddressBookDBService addressBookDBService;
 	private static Logger log = Logger.getLogger(AddressBookDBService.class.getName());
+	private PreparedStatement ContactDataStatement;
 
 	private AddressBookDBService() {
 	}
@@ -59,6 +60,51 @@ public class AddressBookDBService {
 			e.printStackTrace();
 		}
 		return contactList;
+	}
+
+	public int updateEmployeeData(String name, String address) {
+		return this.updateContactDataUsingPreparedStatement(name, address);
+	}
+
+	private int updateContactDataUsingPreparedStatement(String firstName, String address) {
+		try (Connection connection = addressBookDBService.getConnection();) {
+			String sql = "update contacts set Address=? where firstName=?;";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, address);
+			preparedStatement.setString(2, firstName);
+			int status = preparedStatement.executeUpdate();
+			return status;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	public List<Contact> getContactDataByName(String name) {
+		List<Contact> contactList = null;
+		if (this.ContactDataStatement == null)
+			this.prepareStatementForContactData();
+		try {
+			ContactDataStatement.setString(1, name);
+			ResultSet resultSet = ContactDataStatement.executeQuery();
+			contactList = this.getAddressBookData(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contactList;
+	}
+
+	private void prepareStatementForContactData() {
+		try {
+			Connection connection = addressBookDBService.getConnection();
+			String sql = "SELECT c.firstName, c.lastName,c.Address_Book_Name,c.Address,c.City,"
+					+ "c.State,c.Zip,c.Phone_Number,c.Email,a.Address_Book_Type "
+					+ "from contacts c inner join Address_Book_Dictionary a "
+					+ "on c.Address_Book_Name=a.Address_Book_Name WHERE firstName=?; ";
+			ContactDataStatement = connection.prepareStatement(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Connection getConnection() throws SQLException {
