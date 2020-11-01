@@ -1,5 +1,6 @@
 package AddressBookJDBC;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,5 +21,15 @@ public class AddressBookTest {
 		addressBookService.updateContactDetails("Deeksha", "Kalpakkam");
 		boolean result = addressBookService.checkContactInSyncWithDB("Deeksha");
 		Assert.assertTrue(result);
+	}
+	
+	@Test
+	public void givenDateRange_WhenRetrieved_ShouldMatchEmployeeCount() {
+		AddressBookService addressBookService = new AddressBookService();
+		addressBookService.readContactData();
+		LocalDate startDate = LocalDate.of(2018, 01, 01);
+		LocalDate endDate = LocalDate.now();
+		List<Contact> contactList = addressBookService.readContactDataForGivenDateRange(startDate, endDate);
+		Assert.assertEquals(2, contactList.size());
 	}
 }

@@ -1,6 +1,8 @@
 package AddressBookJDBC;
 
 import java.sql.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -92,6 +94,16 @@ public class AddressBookDBService {
 			e.printStackTrace();
 		}
 		return contactList;
+	}
+
+	public List<Contact> getContactForGivenDateRange(LocalDate startDate, LocalDate endDate) {
+		String sql = String.format(
+				"SELECT c.firstName, c.lastName,c.Address_Book_Name,c.Address,c.City,"
+						+ "c.State,c.Zip,c.Phone_Number,c.Email,a.Address_Book_Type "
+						+ "from contacts c inner join Address_Book_Dictionary a "
+						+ "on c.Address_Book_Name=a.Address_Book_Name WHERE startDate BETWEEN '%s' AND '%s'; ",
+				Date.valueOf(startDate), Date.valueOf(endDate));
+		return this.getContactDetailsUsingSqlQuery(sql);
 	}
 
 	private void prepareStatementForContactData() {
