@@ -3,16 +3,25 @@
  */
 package AddressBookJDBC;
 
-import java.util.logging.Logger;
+import java.util.List;
 
 public class AddressBookService {
 
-	private static Logger log = Logger.getLogger(AddressBookService.class.getName());
+	private List<Contact> contactList;
+	private AddressBookDBService addressBookDBService;
 
-	public static void main(String[] args) {
+	public AddressBookService(List<Contact> contactList) {
+		this();
+		this.contactList = contactList;
+	}
+	
+	public AddressBookService() {
+		addressBookDBService = AddressBookDBService.getInstance();
+	}
 
-		// Welcome message added
-		log.info("Welcome to Address Book Database Connectivity");
+	public List<Contact> readContactData() {
+		this.contactList = addressBookDBService.readData();
+		return contactList;
 	}
 
 }
