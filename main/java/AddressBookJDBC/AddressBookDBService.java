@@ -105,6 +105,31 @@ public class AddressBookDBService {
 				Date.valueOf(startDate), Date.valueOf(endDate));
 		return this.getContactDetailsUsingSqlQuery(sql);
 	}
+	
+	public Map<String, Integer> getContactsByCityOrState() {
+		Map<String, Integer> contactByCityOrStateMap = new HashMap<>();
+		ResultSet resultSet;
+		String sqlCity = "SELECT city, count(firstName) as count from contacts group by City; ";
+		String sqlState = "SELECT state, count(firstName) as count from contacts group by State; ";
+		try (Connection connection = addressBookDBService.getConnection()) {
+			Statement statement = connection.createStatement();
+			resultSet = statement.executeQuery(sqlCity);
+			while (resultSet.next()) {
+				String city = resultSet.getString("city");
+				Integer count = resultSet.getInt("count");
+				contactByCityOrStateMap.put(city,count);
+			}
+			resultSet = statement.executeQuery(sqlState);
+			while (resultSet.next()) {
+				String state = resultSet.getString("state");
+				Integer count = resultSet.getInt("count");
+				contactByCityOrStateMap.put(state,count);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contactByCityOrStateMap;
+	}
 
 	private void prepareStatementForContactData() {
 		try {
