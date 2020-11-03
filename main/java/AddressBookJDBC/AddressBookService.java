@@ -4,6 +4,7 @@
 package AddressBookJDBC;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +18,12 @@ public class AddressBookService {
 	private AddressBookDBService addressBookDBService;
 
 	public enum IOService {
-		DB_IO
+		DB_IO, REST_IO
 	}
 
 	public AddressBookService(List<Contact> contactList) {
 		this();
-		this.contactList = contactList;
+		this.contactList = new ArrayList<>(contactList);
 	}
 
 	public AddressBookService() {
@@ -83,6 +84,15 @@ public class AddressBookService {
 			int phone, String email, String addressBookName, LocalDate startDate) {
 		contactList.add(addressBookDBService.addContact(firstName, lastName, address, city, state, zip, phone, email,
 				addressBookName, startDate));
+
+	}
+
+	public void addContactToJSONServer(Contact contactData, IOService ioService) {
+		if (ioService.equals(IOService.DB_IO))
+			this.addContactToDB(contactData.firstName, contactData.lastName, contactData.address, contactData.city,
+					contactData.state, contactData.zip, contactData.phoneNumber, contactData.email,
+					contactData.addressBookName, contactData.startDate);
+		contactList.add(contactData);
 
 	}
 
