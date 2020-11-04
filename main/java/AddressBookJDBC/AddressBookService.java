@@ -46,7 +46,7 @@ public class AddressBookService {
 	}
 
 	public void updateContactDetails(String name, String address) {
-		int result = addressBookDBService.updateEmployeeData(name, address);
+		int result = addressBookDBService.updateContactData(name, address);
 		if (result == 0)
 			return;
 		Contact personInfo = this.getContactData(name);

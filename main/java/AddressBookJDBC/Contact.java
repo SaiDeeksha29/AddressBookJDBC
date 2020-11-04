@@ -15,7 +15,8 @@ public class Contact {
 	public String addressBookName;
 	public String addressBookType;
 	public LocalDate startDate;
-
+    public int id;
+	
 	public Contact(String firstName, String lastName, String address, String city, String state, int zip,
 			int phoneNumber, String email, String addressBookName, String addressBookType) {
 		this.firstName = firstName;
@@ -42,6 +43,12 @@ public class Contact {
 		this.email = email;
 		this.addressBookName = addressBookName;
 		this.startDate = startDate;
+	}
+	
+	public Contact(int id,String firstName, String lastName, String address, String city, String state, int zip,
+			int phoneNumber, String email, String addressBookName, LocalDate startDate) {
+		this(firstName, lastName, address, city, state, zip, phoneNumber, email, addressBookName, startDate);
+		this.id=id;
 	}
 
 	@Override
