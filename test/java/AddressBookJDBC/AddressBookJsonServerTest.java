@@ -85,4 +85,20 @@ public class AddressBookJsonServerTest {
 		int statusCode = response.getStatusCode();
 		Assert.assertEquals(200, statusCode);
 	}
+
+	@Test
+	public void givenNewContactName_WhenRemoved_ShouldMatch200ResponseAndCount() {
+		AddressBookService addressBookService;
+		Contact[] arrayOfContacts = getContactList();
+		addressBookService = new AddressBookService(Arrays.asList(arrayOfContacts));
+		Contact contactData = addressBookService.getContactData("Monica");
+		RequestSpecification request = RestAssured.given();
+		request.header("Content-Type", "application/json");
+		Response response = request.delete("/contacts/" + contactData.id);
+		int statusCode = response.getStatusCode();
+		Assert.assertEquals(200, statusCode);
+		addressBookService.deleteContact(contactData.firstName, IOService.REST_IO);
+		long entries = addressBookService.countEntries(IOService.REST_IO);
+		Assert.assertEquals(4, entries);
+	}
 }
