@@ -54,14 +54,6 @@ public class AddressBookService {
 			personInfo.address = address;
 	}
 
-	public void updateContactJsonServer(String firstName, String address, IOService ioService) {
-		if (ioService.equals(IOService.REST_IO)) {
-			Contact personInfo = this.getContactData(firstName);
-			if (personInfo != null)
-				personInfo.address = address;
-		}
-	}
-
 	public Contact getContactData(String name) {
 		return this.contactList.stream().filter(contact -> contact.firstName.equals(name)).findFirst().orElse(null);
 	}
@@ -93,11 +85,6 @@ public class AddressBookService {
 		contactList.add(addressBookDBService.addContact(firstName, lastName, address, city, state, zip, phone, email,
 				addressBookName, startDate));
 
-	}
-
-	public void addContactToAddressBook(Contact contactData, IOService ioService) {
-		if (ioService.equals(IOService.REST_IO))
-			contactList.add(contactData);
 	}
 
 	public void addContact(List<Contact> contactDataList) {
@@ -133,6 +120,19 @@ public class AddressBookService {
 			}
 		}
 		log.info("" + this.contactList);
+	}
+
+	public void addContactToAddressBook(Contact contactData, IOService ioService) {
+		if (ioService.equals(IOService.REST_IO))
+			contactList.add(contactData);
+	}
+
+	public void updateContactJsonServer(String firstName, String address, IOService ioService) {
+		if (ioService.equals(IOService.REST_IO)) {
+			Contact personInfo = this.getContactData(firstName);
+			if (personInfo != null)
+				personInfo.address = address;
+		}
 	}
 
 	public void deleteContact(String firstName, IOService ioService) {

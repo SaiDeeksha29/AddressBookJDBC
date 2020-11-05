@@ -2,6 +2,7 @@ package AddressBookJDBC;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.junit.Assert;
@@ -41,6 +42,26 @@ public class AddressBookJsonServerTest {
 	}
 
 	@Test
+	public void givenNewSalaryForEmployee_WhenUpdatedUsingPreparedStatement_ShouldSyncWithDB() {
+		AddressBookService addressBookService = new AddressBookService();
+		List<Contact> contactList = addressBookService.readContactData();
+		addressBookService.updateContactDetails("Deeksha", "Kalpakkam");
+		boolean result = addressBookService.checkContactInSyncWithDB("Deeksha");
+		Assert.assertTrue(result);
+	}
+
+	@Test
+	public void givenNewContact_WhenAdded_ShouldSyncWithDB() {
+		AddressBookService addressBookService = new AddressBookService();
+		addressBookService.readContactData();
+		LocalDate date = LocalDate.of(2020, 02, 20);
+		addressBookService.addContactToDatabase("Uma", "Rani", "Whitefield", "Bangalore", "Karnataka", 700012, 99084874,
+				"umarani@gmail.com", "Personal", "Family", date);
+		boolean result = addressBookService.checkContactInSyncWithDB("Uma");
+		Assert.assertTrue(result);
+	}
+
+	@Test
 	public void givenNewListOfContacts_WhenAdded_ShouldMatch() {
 		AddressBookService addressBookService;
 		Contact[] arrayOfContacts = getContactList();
@@ -58,7 +79,7 @@ public class AddressBookJsonServerTest {
 			addressBookService.addContactToAddressBook(contactData, IOService.REST_IO);
 		}
 		long entries = addressBookService.countEntries(IOService.REST_IO);
-		Assert.assertEquals(5, entries);
+		Assert.assertEquals(6, entries);
 	}
 
 	@Test
